@@ -3,6 +3,19 @@ import twilio.twiml
 
 app = Flask(__name__)
 
+def fizzbuzz(n):
+	if n%3==0 and n%5==0:
+		return "fizz buzz"
+	elif n%3==0:
+		return "fizz"
+	elif n%5==0:
+		return "buzz"
+	else
+		return str(n)
+	
+
+
+
 @app.route("/", methods=['GET','POST'])
 def hello():
 	resp = twilio.twiml.Response()
@@ -10,11 +23,11 @@ def hello():
 	if 'Digits' in request.values:
 		num = request.values['Digits']
 		
-		resp.say('You entered '+str(num))
+		resp.say(fizzbuzz(int(num)))
 
 
 	with resp.gather(numDigits=1) as gather:
-		gather.say('Enter a number')
+		gather.say('Enter a number to play the phone buzz game')
 
 	resp.redirect('/')
 
