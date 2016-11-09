@@ -1,2 +1,2 @@
-web: gunicorn hello_world:app --log-file -
+web: gunicorn fizzbuzz:app --log-file -
 
