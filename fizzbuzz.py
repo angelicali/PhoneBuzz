@@ -15,21 +15,19 @@ url = "https://phonebuzz-yl.herokuapp.com/"
 app = Flask(__name__)
 
 def hash_url(url_params):
+	# hash url into twilio signature
 	global auth_token
 	hashed = hmac.new(auth_token, url_params, sha1)
 	return hashed.digest().encode("base64").rstrip('\n')
-	
 
 def validate_twilio(d):
+	# check if incoming call is validate
 	keys = sorted(list(d))
 	params =  ''.join( [ key + d[key] for key in keys] )
 	url_with_params = url + params
 	signature = hash_url(url_with_params)
-	print(signature)
 	return validator.validate(url,d,signature)
 		
-
-
 def fizzbuzz(n):
 	if n%3==0 and n%5==0:
 		return "fizz buzz" 
@@ -52,16 +50,16 @@ def hello():
 	if request.method == 'POST':
 		info = request.form
 		if validate_twilio(info):
-			resp.say("Comfirmed to have come from twilio")
-		else:
-			resp.say("NOT VALID!!")
-		if 'Digits' in request.values:
-			num = request.values['Digits']
-			resp.say(allfizzbuzz(int(num)))
+			if 'Digits' in request.values:
+				num = request.values['Digits']
+				resp.say(allfizzbuzz(int(num)))
+			else:
+				resp.say("NOT VALID. Ending phone call.")
+				return
 		
 
-	with resp.gather(timeout=5) as gather:
-		gather.say('Enter a number to play the phone buzz game')
+	with resp.gather(timeout=4) as gather:
+		gather.say('Enter a number to play the phone buzz game. ')
 
 	resp.redirect('/')
 
@@ -71,5 +69,4 @@ def hello():
 
 if __name__ == "__main__":
 	app.run(debug=True)
-	#print(validate_twilio(test_d))
 
