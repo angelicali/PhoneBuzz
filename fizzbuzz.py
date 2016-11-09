@@ -26,8 +26,8 @@ def hello():
 		resp.say(fizzbuzz(int(num)))
 
 
-	with resp.gather(numDigits=2) as gather:
-		gather.say('Enter a two digit number to play the phone buzz game')
+	with resp.gather() as gather:
+		gather.say('Enter a number to play the phone buzz game')
 
 	resp.redirect('/')
 
