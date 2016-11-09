@@ -2,17 +2,32 @@ from flask import Flask, request
 import twilio.twiml
 from twilio.util import RequestValidator
 
+from hashlib import sha1
+import hmac 
+
+
 
 auth_token = "2e0586523d70a82d17d94c2f23c45d51"
-
 validator = RequestValidator(auth_token)
-
 url = "https://phonebuzz-yl.herokuapp.com/"
+
 
 app = Flask(__name__)
 
+def hash_url(url_params):
+	global auth_token
+	hashed = hmac.new(auth_token, url_params, sha1)
+	return hashed.digest().encode("base64").rstrip('\n')
+	
+
 def validate_twilio(d):
-	pass
+	keys = sorted(list(d))
+	params =  ''.join( [ key + d[key] for key in keys] )
+	url_with_params = url + params
+	signature = hash_url(url_with_params)
+	print(signature)
+	return validator.validate(url,d,signature)
+		
 
 
 def fizzbuzz(n):
@@ -29,16 +44,17 @@ def allfizzbuzz(n):
 	return ' '.join([fizzbuzz(i) for i in range(1,n+1)])
 
 
+
 @app.route("/", methods=['GET','POST'])
 def hello():
 	resp = twilio.twiml.Response()
 
 	if request.method == 'POST':
 		info = request.form
-		resp.say("request form has "+str(info))
-		val = request.values
-		resp.say("request values have " + str(val))
-
+		if validate_twilio(info):
+			resp.say("Comfirmed to have come from twilio")
+		else:
+			resp.say("NOT VALID!!")
 		if 'Digits' in request.values:
 			num = request.values['Digits']
 			resp.say(allfizzbuzz(int(num)))
@@ -55,4 +71,5 @@ def hello():
 
 if __name__ == "__main__":
 	app.run(debug=True)
+	#print(validate_twilio(test_d))
 
