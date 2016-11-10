@@ -11,7 +11,7 @@ import hmac
 account_sid = "ACbba02f681a40e42defdc0ae3c7cd0acd"
 auth_token = "2e0586523d70a82d17d94c2f23c45d51"
 validator = RequestValidator(auth_token)
-url = "https://phonebuzz-yl.herokuapp.com/"
+default_url = "https://phonebuzz-yl.herokuapp.com/"
 
 
 
@@ -24,7 +24,7 @@ def hash_url(url_params):
 	hashed = hmac.new(auth_token, url_params, sha1)
 	return hashed.digest().encode("base64").rstrip('\n')
 
-def validate_twilio(d):
+def validate_twilio(url,d):
 	# check if incoming call is validate
 	keys = sorted(list(d))
 	params =  ''.join( [ key + d[key] for key in keys] )
@@ -68,7 +68,7 @@ def dialPhoneBuzz():
 				# Make the call
 				call = client.calls.create(to= num,  # Any phone number
 								           from_="+12179797039", # Must be a valid Twilio number
-								           url="https://phonebuzz-yl.herokuapp.com/fizzbuzz")
+								           url= defaul_url+"/fizzbuzz")
 				return "Calling %s"%num
 		return render_template("dial.html", error_msg = "invalid phone number")
 
@@ -80,7 +80,7 @@ def phoneBuzz():
 	resp = twilio.twiml.Response()
 	if request.method == 'POST':
 		info = request.form
-		if validate_twilio(info):
+		if validate_twilio(defaul_url+"/fizzbuzz", info):
 			if 'Digits' in request.values:
 				num = request.values['Digits']
 				resp.say(allfizzbuzz(int(num)))
