@@ -84,9 +84,9 @@ def phoneBuzz():
 			if 'Digits' in request.values:
 				num = request.values['Digits']
 				resp.say(allfizzbuzz(int(num)))
-			else:
-				resp.say("NOT VALID. Ending phone call.")
-				return str(resp)
+		else:
+			resp.say("NOT VALID. Ending phone call.")
+			return str(resp)
 		
 
 	with resp.gather(timeout=4) as gather:
