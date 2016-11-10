@@ -6,12 +6,12 @@
     <body>
 		<form method = 'POST' action="/">
 			
-			 Enter phone number to play the phone buzz game! <br>
-			Phone number
+			<h2>Enter phone number to play the phone buzz game!</h2> <br>
+			Phone number:<br>
 			<input name="tel" required> <br>
-			 Time delay
-			<input type="number" name= "delay"> seconds
-			<p font-color ="red" >{{error_msg}} </p>
+			 Time delay:<br>
+			<input type="number" name= "delay" required> seconds<br>
+			<p style="color:red" >{{error_msg}} </p>
 			<input type="submit"/>
 		</form>
     </body>
