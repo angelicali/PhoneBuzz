@@ -45,6 +45,10 @@ def fizzbuzz(n):
 		return str(n)
 	
 def allfizzbuzz(n):
+	try:
+		n = int(n)
+	except:
+		return "Not a valid number" 
 	return ' '.join([fizzbuzz(i) for i in range(1,n+1)])
 
 def valid_phone_number(num_str):
@@ -93,7 +97,7 @@ def phoneBuzz():
 		if validate_twilio(default_url+"fizzbuzz", info):
 			if 'Digits' in request.values:
 				num = request.values['Digits']
-				resp.say(allfizzbuzz(int(num)))
+				resp.say(allfizzbuzz(num))
 		else:
 			resp.say("NOT VALID. Ending phone call.")
 			return str(resp)
