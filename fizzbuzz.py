@@ -4,6 +4,8 @@ from twilio.util import RequestValidator
 from twilio.rest.lookups import TwilioLookupsClient
 from twilio.rest import TwilioRestClient
 
+from threading import Timer
+
 from hashlib import sha1
 import hmac 
 
@@ -54,6 +56,12 @@ def valid_phone_number(num_str):
 	except:
 		return None
 
+def callFizzBuzz(num):
+	client = TwilioRestClient(account=account_sid, token=auth_token)
+	client.calls.create(to= num,  # Any phone number
+			           from_="+12179797039", # Must be a valid Twilio number
+					   url= default_url+"fizzbuzz")
+
 
 @app.route("/", methods=['GET','POST'])
 def dialPhoneBuzz():
@@ -64,12 +72,13 @@ def dialPhoneBuzz():
 			num = request.form['tel']
 			num = valid_phone_number(num)
 			if num:
-				client = TwilioRestClient(account=account_sid, token=auth_token)
-				# Make the call
-				call = client.calls.create(to= num,  # Any phone number
-								           from_="+12179797039", # Must be a valid Twilio number
-								           url= default_url+"fizzbuzz")
-				return "Calling %s"%num
+				response_msg = "Calling %s"%num
+				delay = request.form.get('delay')
+				if delay:
+					t = Timer(int(delay), callFizzBuzz, args=[num])
+					t.start()
+					response_msg += " in %d seconds"%int(delay)
+				return response_msg
 		return render_template("dial.html", error_msg = "invalid phone number")
 
 
@@ -78,6 +87,7 @@ def dialPhoneBuzz():
 @app.route("/fizzbuzz", methods=['GET','POST'])
 def phoneBuzz():
 	resp = twilio.twiml.Response()
+
 	if request.method == 'POST':
 		info = request.form
 		if validate_twilio(default_url+"fizzbuzz", info):
