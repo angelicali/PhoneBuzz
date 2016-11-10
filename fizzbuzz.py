@@ -68,7 +68,7 @@ def dialPhoneBuzz():
 				# Make the call
 				call = client.calls.create(to= num,  # Any phone number
 								           from_="+12179797039", # Must be a valid Twilio number
-								           url= defaul_url+"/fizzbuzz")
+								           url= default_url+"fizzbuzz")
 				return "Calling %s"%num
 		return render_template("dial.html", error_msg = "invalid phone number")
 
@@ -80,7 +80,7 @@ def phoneBuzz():
 	resp = twilio.twiml.Response()
 	if request.method == 'POST':
 		info = request.form
-		if validate_twilio(default_url+"/fizzbuzz", info):
+		if validate_twilio(default_url+"fizzbuzz", info):
 			if 'Digits' in request.values:
 				num = request.values['Digits']
 				resp.say(allfizzbuzz(int(num)))
