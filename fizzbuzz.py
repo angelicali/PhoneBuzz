@@ -78,7 +78,6 @@ def dialPhoneBuzz():
 @app.route("/fizzbuzz", methods=['GET','POST'])
 def phoneBuzz():
 	resp = twilio.twiml.Response()
-
 	if request.method == 'POST':
 		info = request.form
 		if validate_twilio(info):
@@ -87,7 +86,7 @@ def phoneBuzz():
 				resp.say(allfizzbuzz(int(num)))
 			else:
 				resp.say("NOT VALID. Ending phone call.")
-				return
+				return str(resp)
 		
 
 	with resp.gather(timeout=4) as gather:
