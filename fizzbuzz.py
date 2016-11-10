@@ -80,7 +80,7 @@ def phoneBuzz():
 	resp = twilio.twiml.Response()
 	if request.method == 'POST':
 		info = request.form
-		if validate_twilio(defaul_url+"/fizzbuzz", info):
+		if validate_twilio(default_url+"/fizzbuzz", info):
 			if 'Digits' in request.values:
 				num = request.values['Digits']
 				resp.say(allfizzbuzz(int(num)))
