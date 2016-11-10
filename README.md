@@ -12,7 +12,7 @@ A linux machine must be used.
 Make sure python2, virtualenv and pip are installed.
 ```
 virtualenv --no-site-packages venv
-source venv/bin/pip install -r requirements
+source venv/bin/pip install -r requirements.txt
 python fizzbuzz.py
 ```
 
