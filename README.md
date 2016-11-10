@@ -4,7 +4,7 @@ Twilio account credentials can be edited in the begining of ```fizzbuzz.py```.
 Call (347) 652-172.
 
 ### Get PhoneBuzz Call
-Enter phone number at ```https://phonebuzz-yl.herokuapp.com/```.
+Enter phone number [here](https://phonebuzz-yl.herokuapp.com/).
 Only phone numbers verified by Twilio will be called.
 
 ### Run it locally:
